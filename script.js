@@ -1,56 +1,50 @@
-document.getElementById("tripForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+const itineraries = [
+  {
+    title: "Richmond Riverside & Ham House",
+    highlights: ["River walk", "Historic mansion", "Picnic spots"],
+    outbound: "District Line to Richmond",
+    inbound: "Bus 371 to Wimbledon",
+    notes: "Best enjoyed on a sunny day with time for riverside lunch."
+  },
+  {
+    title: "Greenwich & Royal Observatory",
+    highlights: ["Thames views", "Prime Meridian", "Maritime history"],
+    outbound: "Jubilee Line to North Greenwich + DLR",
+    inbound: "Bus 188 to Elephant & Castle, then Northern Line",
+    notes: "Ideal for history buffs and panoramic views."
+  },
+  {
+    title: "Epping Forest & Queen Elizabeth's Hunting Lodge",
+    highlights: ["Woodland walk", "Historic lodge", "Wildlife"],
+    outbound: "Central Line to Chingford",
+    inbound: "Bus 444 to Tottenham Hale, then Victoria Line",
+    notes: "Pack walking shoes and snacks for a nature-filled escape."
+  }
+];
 
-  const date = document.getElementById("tripDate").value;
-  const themes = Array.from(document.getElementById("themes").selectedOptions).map(opt => opt.value);
+function renderItineraries(itineraries) {
+  const container = document.getElementById("itinerary-container");
+  container.innerHTML = ""; // Clear previous content
 
-  const userInput = {
-    startStation: "Wimbledon",
-    departureTime: "09:30",
-    returnTime: "19:00",
-    returnMode: "bus",
-    date,
-    themes
-  };
+  itineraries.forEach((trip) => {
+    const card = document.createElement("div");
+    card.className = "itinerary-card";
 
-  const events = await fetchMockEvents(date); // Replace with real API later
-  const filteredEvents = filterEvents(events, themes, userInput.returnTime);
-  const itinerary = generateItinerary(userInput, filteredEvents);
-  const score = scoreItinerary(itinerary, userInput);
+    card.innerHTML = `
+      <h2>${trip.title}</h2>
+      <ul>
+        ${trip.highlights.map(item => `<li>${item}</li>`).join("")}
+      </ul>
+      <p><strong>Outbound:</strong> ${trip.outbound}</p>
+      <p><strong>Inbound:</strong> ${trip.inbound}</p>
+      <p><em>${trip.notes}</em></p>
+    `;
 
-  displayResults(itinerary, score);
-});
-
-// Mock functions (replace with real logic later)
-function fetchMockEvents(date) {
-  return Promise.resolve([
-    { name: "Marcus Bonfanti", start_time: "17:30", venue: { name: "Ronnie Scott’s" }, category: "events" }
-  ]);
-}
-
-function filterEvents(events, themes, returnTime) {
-  return events.filter(e => themes.includes(e.category));
-}
-
-function generateItinerary(userInput, events) {
-  return [
-    { time: "10:00", activity: "Tube to Richmond", category: "travel" },
-    { time: "10:45", activity: "Walk along the Thames", category: "nature" },
-    { time: "12:00", activity: "Visit Ham House", category: "history" },
-    { time: "14:30", activity: "Afternoon Tea at Petersham Nurseries", category: "food" },
-    { time: "17:30", activity: "Marcus Bonfanti at Ronnie Scott’s", category: "events" },
-    { time: "18:30", activity: "Bus back to Wimbledon", category: "travel" }
-  ];
-}
-
-function scoreItinerary(itinerary, userInput) {
-  return 92; // Placeholder score
-}
-
-function displayResults(itinerary, score) {
-  const container = document.getElementById("results");
-  container.innerHTML = `<h2>Itinerary Score: ${score}</h2>`;
-  itinerary.forEach(item => {
-    container.innerHTML += `<p><strong>${item.time}</strong> – ${item.activity}</p>`;
+    container.appendChild(card);
   });
 }
+
+// Call this after DOM is loaded
+document.addEventListener("DOMContentLoaded", () => {
+  renderItineraries(itineraries);
+});
