@@ -1,0 +1,19 @@
+body {
+  font-family: sans-serif;
+  margin: 2rem;
+  background-color: #f9f9f9;
+}
+
+form {
+  margin-bottom: 2rem;
+}
+
+label {
+  display: block;
+  margin: 1rem 0;
+}
+
+#results {
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+}
